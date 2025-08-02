@@ -31,7 +31,8 @@ jobs:
           jmeter -n -t path/to/your_test_file.jmx -l results.jtl
 
       - name: Upload Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
+
         with:
           name: jmeter-results
           path: results.jtl
