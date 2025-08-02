@@ -28,7 +28,7 @@ jobs:
 
       - name: Run JMeter Test
         run: |
-          jmeter -n -t path/to/your_test_file.jmx -l results.jtl
+          jmeter -n -t pdfDownload.jmx/your_test_file.jmx -l results.jtl
 
       - name: Upload Results
         uses: actions/upload-artifact@v4
