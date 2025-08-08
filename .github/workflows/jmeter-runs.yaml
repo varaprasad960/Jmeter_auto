@@ -28,11 +28,10 @@ jobs:
 
       - name: Run JMeter Test
         run: |
-          mkdir results
-          jmeter -n -t Jmeter_auto/pdfDownload.jmx -l results/results.jtl
+          jmeter -n -t Jmeter_auto/pdfDownload.jmx -l results.jtl
 
       - name: Upload Results
         uses: actions/upload-artifact@v4
         with:
           name: jmeter-results
-          path: results/
+          path: results.jtl
