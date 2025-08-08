@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -24,15 +24,15 @@ jobs:
       - name: Download JMeter
         run: |
           wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
-          tar -xvzf apache-jmeter-5.5.tgz
+          tar -xzf apache-jmeter-5.5.tgz
 
       - name: Run JMeter Test
         run: |
-          mkdir result
-          ./apache-jmeter-5.5/bin/jmeter -n -t pdfDownload.jmx -l result/result.jtl -e -o result/html-report
+          mkdir -p result
+          ./apache-jmeter-5.5/bin/jmeter -n -t pdfDownload.jmx -l result/results.jtl -e -o result/report
 
-      - name: Upload JMeter HTML Report as Artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload JMeter Report
+        uses: actions/upload-artifact@v4
         with:
-          name: jmeter-html-report
-          path: result/html-report
+          name: jmeter-report
+          path: result/report
