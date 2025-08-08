@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - testing
-    paths:
-      - '**/*.jmx'
 
 jobs:
   jmeter-test:
@@ -21,15 +19,28 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Download JMeter
+      - name: Download and Install JMeter with Plugins
         run: |
           wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
           tar -xzf apache-jmeter-5.5.tgz
+          export JMETER_HOME=$(pwd)/apache-jmeter-5.5
+          export PATH=$JMETER_HOME/bin:$PATH
+          
+          # Download plugin manager
+          wget https://jmeter-plugins.org/get/ -O $JMETER_HOME/lib/ext/jmeter-plugins-manager.jar
+          
+          # Install PluginManagerCMDTool
+          wget https://repo1.maven.org/maven2/kg/apc/cmdrunner/2.2.1/cmdrunner-2.2.1.jar -O $JMETER_HOME/lib/cmdrunner-2.2.1.jar
+          
+          # Install dummy sampler plugin
+          $JMETER_HOME/bin/PluginsManagerCMD.sh install jpgc-dummy
 
       - name: Run JMeter Test
         run: |
+          export JMETER_HOME=$(pwd)/apache-jmeter-5.5
+          export PATH=$JMETER_HOME/bin:$PATH
           mkdir -p result
-          ./apache-jmeter-5.5/bin/jmeter -n -t pdfDownload.jmx -l result/results.jtl -e -o result/report
+          $JMETER_HOME/bin/jmeter -n -t pdfDownload.jmx -l result/results.jtl -e -o result/report
 
       - name: Upload JMeter Report
         uses: actions/upload-artifact@v4
